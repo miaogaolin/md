@@ -1,4 +1,5 @@
-let baseColor = "#3f3f3f"
+let baseColor = "#3f3f3f";
+let wxLinkColor = "#576b95";
 
 export default {
   BASE: {
@@ -74,7 +75,6 @@ export default {
       display: "block",
     },
     code_pre: {
-      "font-size": "14px",
       "overflow-x": "auto",
       "border-radius": "8px",
       padding: "1em",
@@ -84,7 +84,8 @@ export default {
     code: {
       "margin": 0,
       "white-space": "nowrap",
-      "font-family": "Menlo, Operator Mono, Consolas, Monaco, monospace"
+      "font-family": "Menlo, Operator Mono, Consolas, Monaco, monospace",
+      "font-size": "14px!important"
     },
   
     image: {
@@ -149,8 +150,9 @@ export default {
     },
 
     wx_link: {
-      color: "#576b95",
+      color: wxLinkColor,
       "text-decoration": "none",
+      "border-bottom": "1px solid " + wxLinkColor
     },
 
     // 字体加粗样式
