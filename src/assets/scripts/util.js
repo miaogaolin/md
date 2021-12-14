@@ -216,6 +216,22 @@ export function formatCss(content) {
 }
 
 /**
+ * 导出编辑器主题
+ * @param {文档内容} doc
+ */
+export function downloadTheme(doc) {
+  let downLink = document.createElement("a");
+
+  downLink.download = "theme.json";
+  downLink.style.display = "none";
+  let blob = new Blob([doc]);
+
+  downLink.href = URL.createObjectURL(blob);
+  document.body.appendChild(downLink);
+  downLink.click();
+  document.body.removeChild(downLink);
+}
+/**
  * 导出原始 Markdown 文档
  * @param {文档内容} doc
  */

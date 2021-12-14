@@ -108,6 +108,7 @@ import {
   saveEditorContent,
   customCssWithTemplate,
   checkImage,
+  downloadTheme
 } from "../../../assets/scripts/util";
 
 import { toBase64 } from "../../../assets/scripts/util";
@@ -349,6 +350,65 @@ export default {
     downloadEditorContent() {
       downloadMD(this.editor.getValue(0));
     },
+    // 导入编辑器主题
+    importEditorTheme() {
+      let menu = document.getElementById("menu");
+      let input = document.createElement("input");
+      input.type = "file";
+      input.name = "filename";
+      input.accept = ".json";
+      menu.appendChild(input);
+      input.onchange = () => {
+        if (!input.files) {
+          return;
+        }
+        const file = input.files[0];
+        if (!/\.json$/i.test(file.name)) {
+          this.$message.error("不支持的主题格式");
+          return;
+        }
+        const reader = new FileReader();
+        reader.readAsText(file);
+        reader.onload = (event) => {
+          let txt = event.target.result;
+          let theme = JSON.parse(txt);
+          if (theme) {
+            let header = this.$refs.header;
+        
+            header.statusChanged(theme.citeStatus);
+            header.citeStatus = theme.citeStatus;
+            header.colorChanged(theme.color);
+            header.selectColor = theme.color;
+            header.sizeChanged(theme.size);
+            header.selectSize = theme.size;
+            header.fontChanged(theme.font);
+            header.selectFont = theme.font;
+            header.codeThemeChanged(theme.codeTheme);
+            header.selectCodeTheme = theme.codeTheme;
+            this.cssEditor.setValue(theme.userCss);
+            
+            this.onEditorRefresh();
+            this.$message.success("主题导入成功");
+          }
+        };
+      };
+      input.click();
+      menu.removeChild(input);
+    },
+    // 导出编辑器主题到本地
+    downloadEditorTheme() {
+      let state = this.$store.state;
+      let doc = JSON.stringify({
+        size: state.currentSize,
+        font: state.currentFont,
+        citeStatus: state.citeStatus,
+        codeTheme: state.codeTheme,
+        nightMode: state.nightMode,
+        color: state.currentColor,
+        userCss: this.cssEditor.getValue(0)
+      });
+      downloadTheme(doc);
+    },
     // 导出编辑器内容为 HTML，并且下载到本地
     exportEditorContent() {
       this.$nextTick(() => {
@@ -415,8 +475,14 @@ export default {
         case "insertPic":
           this.dialogUploadImgVisible = true;
           break;
-        case "download":
+        case "downloadContent":
           this.downloadEditorContent();
+          break;
+        case "importTheme":
+          this.importEditorTheme();
+          break;
+        case "downloadTheme":
+          this.downloadEditorTheme();
           break;
         case "export":
           this.exportEditorContent();
@@ -440,6 +506,7 @@ export default {
       "setWxRendererOptions",
       "editorRefresh",
       "initCssEditorEntity",
+      "setCurrentColor"
     ]),
   },
   mounted() {

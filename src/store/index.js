@@ -10,6 +10,7 @@ import { setColor, formatDoc, formatCss } from "../assets/scripts/util";
 
 Vue.use(Vuex);
 
+
 const state = {
   wxRenderer: null,
   output: "",
@@ -22,8 +23,9 @@ const state = {
   citeStatus: 0,
   nightMode: false,
   codeTheme: config.codeThemeOption[0].value,
-  rightClickMenuVisible: false,
+  rightClickMenuVisible: false
 };
+
 const mutations = {
   setEditorValue(state, data) {
     state.editor.setValue(data);
@@ -152,7 +154,7 @@ const mutations = {
       output += state.wxRenderer.buildAddition();
     }
     state.output = output;
-  },
+  }
 };
 
 export default new Vuex.Store({

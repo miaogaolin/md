@@ -58,7 +58,15 @@ export default {
           },
           {
             text: "导出 Markdown 文档",
-            key: "download",
+            key: "downloadContent",
+          },
+          {
+            text: '导入主题',
+            key: 'importTheme',
+          },
+          {
+            text: "导出主题",
+            key: "downloadTheme",
           },
           {
             text: "导出 HTML 页面",
