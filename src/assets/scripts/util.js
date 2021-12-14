@@ -37,6 +37,7 @@ export function setFontSizeWithTemplate(template) {
     customTheme.block.h2["font-size"] = `${fontSize * 1.1}px`;
     customTheme.block.h3["font-size"] = `${fontSize}px`;
     customTheme.block.h4["font-size"] = `${fontSize}px`;
+    customTheme.block.code["font-size"] = `${fontSize * 0.93}px`
     return customTheme;
   };
 }

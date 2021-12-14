@@ -85,7 +85,7 @@ export default {
       "margin": 0,
       "white-space": "nowrap",
       "font-family": "Menlo, Operator Mono, Consolas, Monaco, monospace",
-      "font-size": "14px!important"
+      "font-size": "14px"
     },
   
     image: {
