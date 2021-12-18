@@ -8,6 +8,7 @@ import DEFAULT_CONTENT from "@/assets/example/markdown.md";
 import DEFAULT_CSS_CONTENT from "@/assets/example/theme-css.txt";
 import { setColor, formatDoc, formatCss } from "../assets/scripts/util";
 
+  
 Vue.use(Vuex);
 
 
@@ -80,10 +81,12 @@ const mutations = {
       size: state.currentSize,
     });
   },
-  initEditorEntity(state) {
+  initEditorEntity(state, content) {
     const editorDom = document.getElementById("editor");
-
-    if (!editorDom.value) {
+    
+    if (content) {
+      editorDom.value = content;
+    }else if (!editorDom.value) {
       editorDom.value =
         localStorage.getItem("__editor_content") || formatDoc(DEFAULT_CONTENT);
     }

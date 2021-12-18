@@ -98,6 +98,8 @@ import aboutDialog from "../../../components/CodemirrorEditor/aboutDialog";
 import insertFormDialog from "../../../components/CodemirrorEditor/insertForm";
 import rightClickMenu from "../../../components/CodemirrorEditor/rightClickMenu";
 import uploadImgDialog from "../../../components/CodemirrorEditor/uploadImgDialog";
+import {Client} from "@notionhq/client";
+import notion2md from "notion-to-md";
 
 import {
   css2json,
@@ -163,7 +165,16 @@ export default {
   },
   methods: {
     initEditor() {
-      this.initEditorEntity();
+      let initContent = "";
+      let query = this.$route.query;
+      if (query && query.ref && 
+      query.auth && query.page_id) {
+        initContent = "Loading Notion Page...";
+        this.notionToMarkdown(query.auth, query.page_id);
+      }
+      this.initEditorEntity(initContent);
+      
+      
       this.editor.on("change", (cm, e) => {
         if (this.changeTimer) clearTimeout(this.changeTimer);
         this.changeTimer = setTimeout(() => {
@@ -201,6 +212,19 @@ export default {
       this.editor.on("scroll", () => {
         this.$store.commit("setRightClickMenuVisible", false);
       });
+    },
+    async notionToMarkdown(auth, pageID) {
+      const notion = new Client({
+        auth: auth,
+        baseUrl: "https://cors-anywhere.endpot.workers.dev/?https://api.notion.com"
+      });
+      // passing notion client to the option
+      const n2m = new notion2md({ notionClient: notion });
+      const mdblocks = await n2m.pageToMarkdown(pageID);
+      const mdString = n2m.toMarkdownString(mdblocks);
+      this.setEditorValue(mdString.trim());
+      this.onEditorRefresh();
+      saveEditorContent(this.editor, "__editor_content");
     },
     initCssEditor() {
       this.initCssEditorEntity();
@@ -506,7 +530,8 @@ export default {
       "setWxRendererOptions",
       "editorRefresh",
       "initCssEditorEntity",
-      "setCurrentColor"
+      "setCurrentColor",
+      "setEditorValue"
     ]),
   },
   mounted() {
