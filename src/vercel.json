@@ -1,0 +1,10 @@
+{
+    "name": "md",
+    "version": 2,
+    "rewrites": [
+        {
+            "source": "/api/(.*)",
+            "destination": "/notion-api"
+        }
+    ]
+  }

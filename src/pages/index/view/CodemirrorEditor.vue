@@ -99,7 +99,7 @@ import insertFormDialog from "../../../components/CodemirrorEditor/insertForm";
 import rightClickMenu from "../../../components/CodemirrorEditor/rightClickMenu";
 import uploadImgDialog from "../../../components/CodemirrorEditor/uploadImgDialog";
 import {Client} from "@notionhq/client";
-import notion2md from "notion-to-md";
+import notion2md from "../../../plugins/notion-to-md";
 
 import {
   css2json,
@@ -214,17 +214,27 @@ export default {
       });
     },
     async notionToMarkdown(auth, pageID) {
-      const notion = new Client({
-        auth: auth,
-        baseUrl: "https://cors-anywhere.endpot.workers.dev/?https://api.notion.com"
-      });
-      // passing notion client to the option
-      const n2m = new notion2md({ notionClient: notion });
-      const mdblocks = await n2m.pageToMarkdown(pageID);
-      const mdString = n2m.toMarkdownString(mdblocks);
-      this.setEditorValue(mdString.trim());
-      this.onEditorRefresh();
-      saveEditorContent(this.editor, "__editor_content");
+      try {
+        const notion = new Client({
+          auth: auth,
+          baseUrl: "/notion-api"
+        });
+        // passing notion client to the option
+        const n2m = new notion2md({ notionClient: notion });
+        const mdblocks = await n2m.pageToMarkdown(pageID, 10);
+        const mdString = n2m.toMarkdownString(mdblocks);
+        this.setEditorValue(mdString.trim());
+        this.onEditorRefresh();
+        saveEditorContent(this.editor, "__editor_content");
+      } catch (e) {
+        this.$notify({
+          showClose: true,
+          message: e,
+          offset: 80,
+          duration: 2000,
+          type: "error",
+        });
+      }
     },
     initCssEditor() {
       this.initCssEditorEntity();
