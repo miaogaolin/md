@@ -12,8 +12,8 @@ module.exports = (req, res) => {
     'method': 'GET',
     'url': target,
     'headers': {
-      'Notion-Version': res.headers['notion-version'],
-      'Authorization': res.headers['authorization']
+      'Notion-Version': req.headers['notion-version'],
+      'Authorization': req.headers['authorization']
     }
   };
   request(options, function (error, response) {
