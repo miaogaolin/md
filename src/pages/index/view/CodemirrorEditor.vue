@@ -217,7 +217,7 @@ export default {
       try {
         const notion = new Client({
           auth: auth,
-          baseUrl: "/notion-api"
+          baseUrl: "https://127.0.0.1/notion-api"
         });
         // passing notion client to the option
         const n2m = new notion2md({ notionClient: notion });
