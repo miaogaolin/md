@@ -13,7 +13,7 @@ module.exports = (req, res) => {
     'url': target,
     'headers': {
       'Notion-Version': res.headers['notion-version'],
-      'Authorization': res.headers['Authorization']
+      'Authorization': res.headers['authorization']
     }
   };
   request(options, function (error, response) {
